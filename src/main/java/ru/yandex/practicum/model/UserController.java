@@ -40,7 +40,7 @@ public class UserController {
 	public User create(@Valid @RequestBody User user) {
 		counter++;
 		user.setId(counter);
-		if (user.getName()==null||user.getName().isBlank()) {
+		if (user.getName() == null || user.getName().isBlank()) {
 			user.setName(user.getLogin());;
 		}
 		this.users.put(user.getId(), user);
