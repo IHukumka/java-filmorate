@@ -10,4 +10,5 @@ public class SpaceValidator implements ConstraintValidator<NoSpaces, String> {;
 	       return !string.contains(" ");
 	   }
 
+	   
 }

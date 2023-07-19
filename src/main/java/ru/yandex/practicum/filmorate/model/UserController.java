@@ -47,6 +47,7 @@ public class UserController {
 		return this.users.get(user.getId());
 	}
 	
+	
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
 	public User update(@Valid @RequestBody User user) {
