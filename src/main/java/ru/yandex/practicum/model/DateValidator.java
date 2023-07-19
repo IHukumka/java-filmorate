@@ -18,5 +18,4 @@ public class DateValidator implements ConstraintValidator<IsAfter, LocalDate> {
 	   public boolean isValid(LocalDate date, ConstraintValidatorContext constraintValidatorContext) {
 	       return date.isAfter(validDate);
 	   }
-	   
 }
