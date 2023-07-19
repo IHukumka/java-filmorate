@@ -10,10 +10,10 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = SpaceValidator.class)
 @Documented
 public @interface NoSpaces {
-	
+
 	String message() default "{message.key}";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
-	
-	
+
+
 }

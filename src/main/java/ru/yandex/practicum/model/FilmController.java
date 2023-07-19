@@ -15,15 +15,15 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping ("/films")
 public class FilmController {
-	
+
 	private HashMap<Integer, Film> films;
 	int counter = 0;
-	
+
 	public FilmController() {
 		this.films = new HashMap<>();
 		counter += films.size();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ArrayList<Film> getAll() {
@@ -33,7 +33,7 @@ public class FilmController {
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
 	public Film update(@Valid @RequestBody Film film) {
@@ -44,7 +44,7 @@ public class FilmController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public Film create(@Valid @RequestBody Film film) {
@@ -53,5 +53,5 @@ public class FilmController {
 		this.films.put(film.getId(), film);
 		return this.films.get(film.getId());
 	}
-	
+
 }

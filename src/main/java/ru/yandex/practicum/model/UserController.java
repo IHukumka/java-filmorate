@@ -15,15 +15,15 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping ("/users")
 public class UserController {
-	
+
 	private HashMap<Integer, User> users;
 	int counter = 0;
-	
+
 	public UserController() {
 		this.users = new HashMap<>();
 		counter += users.size();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ArrayList<User> getAll() {
@@ -33,7 +33,7 @@ public class UserController {
 		}
 		return result;
 	}
-	
+
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
@@ -46,8 +46,8 @@ public class UserController {
 		this.users.put(user.getId(), user);
 		return this.users.get(user.getId());
 	}
-	
-	
+
+
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
 	public User update(@Valid @RequestBody User user) {
