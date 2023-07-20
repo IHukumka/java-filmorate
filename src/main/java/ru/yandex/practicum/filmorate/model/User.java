@@ -24,7 +24,7 @@ public class User {
 	@NotNull(message = "Id cannot be null")
 	@NoSpaces
 	private String login;
-	
+
 	private String name;
 
 	@Past
