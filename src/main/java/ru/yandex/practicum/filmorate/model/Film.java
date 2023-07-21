@@ -26,7 +26,7 @@ public class Film {
 	@Size(min = 10, max = 200, message
 		      = "Description must be between 10 and 200 characters")
 	private String description;
-	
+
 	@NotNull(message = "Date cannot be null")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Past(message = "Release date shall be in past")
