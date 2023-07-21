@@ -28,7 +28,7 @@ public class User {
 	private String name;
 
 	@Past
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthday;
 
 }
