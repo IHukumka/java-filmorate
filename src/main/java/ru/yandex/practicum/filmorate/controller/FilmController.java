@@ -62,7 +62,8 @@ public class FilmController {
 	}
 
 	private int getNextId() {
-		return counter++;
+		counter++;
+		return counter;
 	}
 
 }
