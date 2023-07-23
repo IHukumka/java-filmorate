@@ -63,7 +63,7 @@ public class UserController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	private int getNextId() {
 		return counter++;
 	}
