@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +17,7 @@ import lombok.Builder;
 
 @Data
 @Builder
-public class Film {
+public class Film implements Comparable <Film> {
 
 	private Integer id;
 
@@ -31,10 +32,19 @@ public class Film {
 	@NotNull(message = "Date cannot be null")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Past(message = "Release date shall be in past")
-	@IsAfter(current = "1895-12-28", message = "Release date shall be after 28.12.1985")
+	@IsAfter(current = "1895-12-28",
+			 message = "Release date shall be after 28.12.1985")
 	private LocalDate releaseDate;
 
 	@Positive
 	private Integer duration;
+
+	private final HashSet<Integer> likes = new HashSet<>();
+
+	@Override
+	public int compareTo(Film otherFilm) {
+		return ((Integer) this.getLikes().size())
+				.compareTo(otherFilm.getLikes().size());
+	}
 
 }
