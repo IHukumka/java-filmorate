@@ -12,7 +12,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 public class InMemoryFilmStorage implements FilmStorage {
 
 	protected final Map<Integer, Film> films;
-	
+
 	protected Integer counter;
 
 	public InMemoryFilmStorage() {
@@ -54,6 +54,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 		Film film = null;
 		if (films.containsKey(id)) {
 			film = update;
+			if (film.getLikes() == null) {
+				film.setLikes(0);
+			}
 			films.put(id, film);
 		}
 		return film;
@@ -62,13 +65,15 @@ public class InMemoryFilmStorage implements FilmStorage {
 	@Override
 	public Film create(Film film) {
 		film.setId(getNextId());
+		if (film.getLikes() == null) {
+			film.setLikes(0);
+		}
 		films.put(film.getId(), film);
 		return films.get(film.getId());
 	}
 
 	private int getNextId() {
-		counter++;
-		return counter;
+		return ++counter;
 	}
 
 }

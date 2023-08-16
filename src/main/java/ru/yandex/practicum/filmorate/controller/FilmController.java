@@ -47,10 +47,10 @@ public class FilmController {
 		log.info("Получен запрос к эндпоинту: 'PUT_FILMS'.");
 		Film film = service.edit(newFilm.getId(), newFilm);
 		if (film != null) {
-			log.info("Обновлены данные фильма id = {}.", film.getId());
+			log.debug("Обновлены данные фильма id = {}.", film.getId());
 			return film;
 		} else {
-			log.info("Фильм id = {} в списке не найден.", newFilm.getId());
+			log.warn("Фильм id = {} в списке не найден.", newFilm.getId());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -71,10 +71,10 @@ public class FilmController {
 		log.info("Получен запрос к эндпоинту: 'GET_FILMS_ID'.");
 		Film film = this.service.get(id);
 		if (film != null) {
-			log.info("Возвращены данные фильма id = {}.", film.getId());
+			log.debug("Возвращены данные фильма id = {}.", film.getId());
 			return film;
 		} else {
-			log.info("Фильм id = {} в списке не найден.", id);
+			log.warn("Фильм id = {} в списке не найден.", id);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -94,10 +94,10 @@ public class FilmController {
 		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_ID'.");
 		boolean deleted = this.service.delete(id);
 		if (deleted) {
-			log.info("Возвращены данные фильма id = {}.", id);
+			log.debug("Возвращены данные фильма id = {}.", id);
 			return deleted;
 		} else {
-			log.info("Фильм id = {} в списке не найден.", id);
+			log.warn("Фильм id = {} в списке не найден.", id);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -109,10 +109,10 @@ public class FilmController {
 		log.info("Получен запрос к эндпоинту: 'PUT_FILMS_LIKE'.");
 		Film film = this.service.addLike(filmId, userId);
 		if (film != null) {
-			log.info("Добавлен лайк пользователя {} фильму id = {}.", userId, film.getId());
+			log.debug("Добавлен лайк пользователя {} фильму id = {}.", userId, film.getId());
 			return film;
 		} else {
-			log.info("Фильм id = {} в списке не найден.", filmId);
+			log.warn("Фильм id = {} в списке не найден.", filmId);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -124,10 +124,10 @@ public class FilmController {
 		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_LIKE'.");
 		Film film = this.service.removeLike(filmId, userId);
 		if (film != null) {
-			log.info("Удален лайк пользователя {} фильму id = {}.", userId, film.getId());
+			log.debug("Удален лайк пользователя {} фильму id = {}.", userId, film.getId());
 			return film;
 		} else {
-			log.info("Пользователь {} или фильм id = {} в списке не найден.", userId, filmId);
+			log.warn("Пользователь {} или фильм id = {} в списке не найден.", userId, filmId);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -139,7 +139,7 @@ public class FilmController {
 		if (count == null) {
 			count = 10;
 		}
-		log.info("Возвращен список {} популярных фильмов.", count);
+		log.debug("Возвращен список из {} популярных фильмов.", count);
 		return service.getTop(count);
 	}
 }

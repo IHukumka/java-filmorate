@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validator.IsAfter;
@@ -39,12 +40,15 @@ public class Film implements Comparable<Film> {
 	@Positive
 	private Integer duration;
 
-	private final HashSet<Integer> likes = new HashSet<>();
+	@PositiveOrZero
+	private Integer likes;
+
+	private final HashSet<Integer> userLikes = new HashSet<>();
 
 	@Override
 	public int compareTo(Film otherFilm) {
-		return ((Integer) this.getLikes().size())
-				.compareTo(otherFilm.getLikes().size());
+		return this.getLikes()
+				.compareTo(otherFilm.getLikes());
 	}
 
 }

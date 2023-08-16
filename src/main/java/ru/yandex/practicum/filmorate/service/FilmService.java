@@ -1,82 +1,30 @@
 package ru.yandex.practicum.filmorate.service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.stereotype.Service;
-
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-@Service
-public class FilmService {
+public interface FilmService {
 
-	private final FilmStorage storage;
+	public Film addLike(Integer filmId, Integer userId);
 
-	public FilmService(FilmStorage storage) {
-		this.storage = storage;
-	}
+	public Film removeLike(Integer filmId, Integer userId);
 
-	public Film addLike(Integer filmId, Integer userId) {
-		Film film = null;
-		if (storage.get(filmId) != null) {
-				film = storage.get(filmId);
-				film.getLikes().add(userId);
-				this.edit(filmId, film);
-		}
-		return film;
-	}
+	public List<Film> getTop(Integer limit);
 
-	public Film removeLike(Integer filmId, Integer userId) {
-		Film film = null;
-		if (storage.get(filmId) != null) {
-			if (storage.get(filmId).getLikes().contains(userId)) {
-				film = storage.get(filmId);
-				film.getLikes().remove(userId);
-				this.edit(filmId, film);
-			}
-		}
-		return film;
-	}
+	public Film edit(Integer id, @Valid Film newFilm);
 
-	public List<Film> getTop(Integer limit){
-		LinkedList<Film> result = new LinkedList<>();
-		int counter = 0;
-		for (Film film:storage.getAll()) {
-			if(counter >= limit) {
-				result.removeLast();
-			}
-			result.push(film);
-			counter++;
-		}
-		return result;
-	}
+	public ArrayList<Film> getAll();
 
-	public Film edit(Integer id, @Valid Film newFilm) {
-		return storage.edit(id, newFilm);
-	}
+	public Film get(Integer id);
 
-	public ArrayList<Film> getAll() {
-		return storage.getAll();
-	}
+	public Film create(@Valid Film film);
 
-	public Film get(Integer id) {
-		return storage.get(id);
-	}
+	public void clearAll();
 
-	public Film create(@Valid Film film) {
-		return storage.create(film);
-	}
-
-	public void clearAll() {
-		storage.clearAll();
-	}
-
-	public boolean delete(@Valid Integer id) {
-		return storage.delete(id);
-	}
+	public boolean delete(@Valid Integer id);
 
 }

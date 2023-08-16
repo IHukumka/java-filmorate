@@ -70,7 +70,6 @@ public class InMemoryUserStorage implements UserStorage {
 	}
 
 	private int getNextId() {
-		counter++;
-		return counter;
+		return ++counter;
 	}
 }

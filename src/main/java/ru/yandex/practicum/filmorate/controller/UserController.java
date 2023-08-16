@@ -56,10 +56,10 @@ public class UserController {
 		log.info("Получен запрос к эндпоинту: 'PUT_FILMS'.");
 		User user = service.edit(newUser.getId(), newUser);
 		if (user != null) {
-			log.info("Обновлены данные пользователя id = {}", user.getId());
+			log.debug("Обновлены данные пользователя id = {}", user.getId());
 			return user;
 		} else {
-			log.info("Пользователь id = {} в списке не найден.", newUser.getId());
+			log.warn("Пользователь id = {} в списке не найден.", newUser.getId());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -70,10 +70,10 @@ public class UserController {
 		log.info("Получен запрос к эндпоинту: 'GET_USERS_ID'.");
 		User user = this.service.get(id);
 		if (user != null) {
-			log.info("Возвращены данные пользователя id = {}.", user.getId());
+			log.debug("Возвращены данные пользователя id = {}.", user.getId());
 			return user;
 		} else {
-			log.info("Пользователь id = {} в списке не найден.", id);
+			log.warn("Пользователь id = {} в списке не найден.", id);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -93,10 +93,10 @@ public class UserController {
 		log.info("Получен запрос к эндпоинту: 'DELETE_USERS_ID'.");
 		boolean deleted = this.service.delete(id);
 		if (deleted) {
-			log.info("Возвращены данные пользователя id = {}.", id);
+			log.debug("Возвращены данные пользователя id = {}.", id);
 			return deleted;
 		} else {
-			log.info("Пользователь id = {} в списке не найден.", id);
+			log.warn("Пользователь id = {} в списке не найден.", id);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -108,15 +108,15 @@ public class UserController {
 		log.info("Получен запрос к эндпоинту: 'PUT_USERS_ADD_FRIEND'.");
 		List<User> friendPair = this.service.addFriend(userId, friendId);
 		if (!friendPair.isEmpty()) {
-			log.info("Пользователь id = {} теперь дружит с пользователем id = {}.",
+			log.debug("Пользователь id = {} теперь дружит с пользователем id = {}.",
 					 userId, friendId);
 			return friendPair;
 		} else {
 			if (this.service.get(userId) == null) {
-				log.info("Пользователь id = {} в списке не найден.", userId);
+				log.warn("Пользователь id = {} в списке не найден.", userId);
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			} else {
-				log.info("Пользователь id = {} в списке не найден.", friendId);
+				log.warn("Пользователь id = {} в списке не найден.", friendId);
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
 		}
@@ -126,18 +126,18 @@ public class UserController {
 	@ResponseBody
 	public List<User> deleteFriend(@Valid @PathVariable Integer userId,
 								   @Valid @PathVariable Integer friendId) {
-		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_ADD_FRIEND'.");
+		log.info("Получен запрос к эндпоинту: 'DELETE_USERS_FRIEND'.");
 		List<User> friendPair = this.service.unFriend(userId, friendId);
 		if (!friendPair.isEmpty()) {
-			log.info("Пользователь id = {} теперь не дружит с пользователем id = {}.",
+			log.debug("Пользователь id = {} теперь не дружит с пользователем id = {}.",
 					 userId, friendId);
 			return friendPair;
 		} else {
 			if (this.service.get(userId) == null) {
-				log.info("Пользователь id = {} в списке не найден.", userId);
+				log.warn("Пользователь id = {} в списке не найден.", userId);
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			} else {
-				log.info("Пользователь id = {} в списке не найден.", friendId);
+				log.warn("Друг id = {} в списке не найден.", friendId);
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
 		}
