@@ -7,12 +7,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.stereotype.Service;
-
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-@Service
 public class InMemoryFilmService implements FilmService {
 
 	private final FilmStorage storage;

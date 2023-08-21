@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,8 @@ import javax.validation.Valid;
 @RequestMapping ("/films")
 public class FilmController {
 
+	@Autowired
+	@Qualifier("InMemoryFilmDBService")
 	private FilmService service;
 	int counter = 0;
 
@@ -50,7 +54,7 @@ public class FilmController {
 			log.debug("Обновлены данные фильма id = {}.", film.getId());
 			return film;
 		} else {
-			log.warn("Фильм id = {} в списке не найден.", newFilm.getId());
+			log.warn("Ошибка обновления фильма id = {}.", newFilm.getId());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -58,10 +62,14 @@ public class FilmController {
 	@PostMapping
 	@ResponseBody
 	public Film create(@Valid @RequestBody Film film) {
+		log.info("Получен запрос к эндпоинту: 'POST_FILMS'.");
 		Film newFilm =  this.service.create(film);
-		log.info("Получен запрос к эндпоинту: 'POST_FILMS'. "
-				+ "Создана запись фильма {}.",
-				newFilm.getId());
+		if (newFilm == null) {
+			log.error("Ошибка создания записи фильма.");
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		} else {
+			log.debug("Создана запись фильма id = {}.", film.getId());
+		}
 		return newFilm;
 	}
 
@@ -81,7 +89,7 @@ public class FilmController {
 
 	@DeleteMapping
 	@ResponseBody
-	public ArrayList<Film> deleteAll() {
+	public List<Film> deleteAll() {
 		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS'. "
 				+ "Список фильмов пуст.");
 		service.clearAll();

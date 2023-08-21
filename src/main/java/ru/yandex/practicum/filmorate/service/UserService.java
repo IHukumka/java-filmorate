@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,7 +23,7 @@ public interface UserService {
 
 	public User edit(Integer id, @Valid User newUser);
 
-	public User get(@Valid Integer id);
+	public User get(@Valid Integer id) throws SQLException;
 
 	public void clearAll();
 

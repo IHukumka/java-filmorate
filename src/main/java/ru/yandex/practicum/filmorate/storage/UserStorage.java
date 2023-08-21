@@ -2,8 +2,11 @@ package ru.yandex.practicum.filmorate.storage;
 
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Component;
+
 import ru.yandex.practicum.filmorate.model.User;
 
+@Component
 public interface UserStorage {
 
 	public ArrayList<User> getAll();

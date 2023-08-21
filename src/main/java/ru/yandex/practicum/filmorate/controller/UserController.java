@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import java.sql.SQLException;
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,8 @@ import javax.validation.Valid;
 @RequestMapping ("/users")
 public class UserController {
 
+	@Autowired
+	@Qualifier("InMemoryUserDBService")
 	private UserService service;
 	int counter = 0;
 
@@ -42,7 +47,7 @@ public class UserController {
 
 	@PostMapping
 	@ResponseBody
-	public User create(@Valid @RequestBody User user) {
+	public User create(@Valid @RequestBody User user) throws SQLException {
 		User newUser = this.service.create(user);
 		log.info("Получен запрос к эндпоинту: 'POST_USERS'. "
 				+ "Создана запись пользователя {}.",
@@ -66,7 +71,7 @@ public class UserController {
 
 	@GetMapping (value = "/{id}")
 	@ResponseBody
-	public User get(@Valid @PathVariable Integer id) {
+	public User get(@Valid @PathVariable Integer id) throws SQLException {
 		log.info("Получен запрос к эндпоинту: 'GET_USERS_ID'.");
 		User user = this.service.get(id);
 		if (user != null) {
@@ -82,7 +87,7 @@ public class UserController {
 	@ResponseBody
 	public List<User> deleteAll() {
 		log.info("Получен запрос к эндпоинту: 'DELETE_USERS'. "
-				+ "Список фильмов пуст.");
+				+ "Список пользователей пуст.");
 		service.clearAll();
 		return service.getAll();
 	}
@@ -104,7 +109,7 @@ public class UserController {
 	@PutMapping(value = "/{userId}/friends/{friendId}")
 	@ResponseBody
 	public List<User> addFriend(@Valid @PathVariable Integer userId,
-								@Valid @PathVariable Integer friendId) {
+								@Valid @PathVariable Integer friendId) throws SQLException {
 		log.info("Получен запрос к эндпоинту: 'PUT_USERS_ADD_FRIEND'.");
 		List<User> friendPair = this.service.addFriend(userId, friendId);
 		if (!friendPair.isEmpty()) {
@@ -125,7 +130,7 @@ public class UserController {
 	@DeleteMapping(value = "/{userId}/friends/{friendId}")
 	@ResponseBody
 	public List<User> deleteFriend(@Valid @PathVariable Integer userId,
-								   @Valid @PathVariable Integer friendId) {
+								   @Valid @PathVariable Integer friendId) throws SQLException {
 		log.info("Получен запрос к эндпоинту: 'DELETE_USERS_FRIEND'.");
 		List<User> friendPair = this.service.unFriend(userId, friendId);
 		if (!friendPair.isEmpty()) {
@@ -147,7 +152,7 @@ public class UserController {
 	@ResponseBody
 	public List<User> getFriends(@Valid @PathVariable Integer userId) {
 		log.info("Получен запрос к эндпоинту: 'GET_USERS_FRIENDS'. "
-				+ "Возвращен список всех пользователей.");
+				+ "Возвращен список всех друзей пользователя {}.", userId);
 		return service.getUserFriends(userId);
 	}
 

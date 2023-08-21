@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"h2_embedded_v2-18a224759ca-61d615458dfe7fe8": {
+			"provider": "h2",
+			"driver": "h2_embedded_v2",
+			"name": "filmorate.mv.db",
+			"save-password": true,
+			"configuration": {
+				"database": "C:\\Users\\Nikita\\git\\yandex-filmorate\\java-filmorate\\db\\filmorate.mv.db",
+				"url": "jdbc:h2:C:\\Users\\Nikita\\git\\yandex-filmorate\\java-filmorate\\db\\filmorate.mv.db",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": false,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800
+		}
+	}
+}
