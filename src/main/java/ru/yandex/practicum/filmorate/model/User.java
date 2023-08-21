@@ -34,4 +34,6 @@ public class User {
 	private LocalDate birthday;
 
 	private final HashSet<Integer> friends = new HashSet<>();
+
+	private final HashSet<Integer> requests = new HashSet<>();
 }
