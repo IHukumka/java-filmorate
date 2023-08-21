@@ -45,6 +45,10 @@ public class Film implements Comparable<Film> {
 
 	private final HashSet<Integer> userLikes = new HashSet<>();
 
+	private final HashSet<String> genre = new HashSet<>();
+	
+	private final String rating;
+
 	@Override
 	public int compareTo(Film otherFilm) {
 		return this.getLikes()
