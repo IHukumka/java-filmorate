@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,4 +33,5 @@ public class User {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthday;
 
+	private final HashSet<Integer> friends = new HashSet<>();
 }
