@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -14,12 +13,11 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryGenreDBStorage")
-public class InMemoryGenreDBStorage implements GenreDBStorage {
+public class GenreDBStorageImpl implements GenreDBStorage {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	public InMemoryGenreDBStorage(JdbcTemplate jdbcTemplate) {
+	public GenreDBStorageImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

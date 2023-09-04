@@ -5,16 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 public class InMemoryUserService implements UserService {
 
-	@Autowired
-	@Qualifier("InMemoryUserStorage")
 	private UserStorage storage;
 
 	public InMemoryUserService(UserStorage storage) {

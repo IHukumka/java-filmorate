@@ -1,20 +1,23 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
+
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -24,21 +27,14 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryFilmDBStorage")
-public class InMemoryFilmDBStorage implements FilmDBStorage {
+public class FilmDBStorageImpl implements FilmDBStorage {
 
 	private final JdbcTemplate jdbcTemplate;
-	@Autowired
-	@Qualifier("InMemoryGenreDBService")
 	private final GenreService genreService;
-	@Autowired
-	@Qualifier("InMemoryRatingDBService")
 	private final RatingService ratingService;
-	@Autowired
-	@Qualifier("InMemoryUserDBService")
 	private final UserService userService;
 
-	public InMemoryFilmDBStorage(JdbcTemplate jdbcTemplate, 
+	public FilmDBStorageImpl(JdbcTemplate jdbcTemplate, 
 			UserService userService, 
 			RatingService ratingService, 
 			GenreService genreService) {
@@ -132,6 +128,46 @@ public class InMemoryFilmDBStorage implements FilmDBStorage {
 		}
 		return newFilm;
 	}
+	
+	@Override
+	public Film addLike(Integer filmId, Integer userId) {
+		Film updatedFilm = this.get(filmId);
+		try {
+			if(this.userService.get(userId) == null) {
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		jdbcTemplate.execute("insert into user_likes (film_id, user_id)"
+				   + " values (" + filmId + ", " + userId + ")");
+		updatedFilm.getUserLikes().add(userId);
+		updatedFilm.setLikes(updatedFilm.getLikes() + 1);
+		return updatedFilm;
+	}
+
+	@Override
+	public Film removeLike(Integer filmId, Integer userId) {
+		Film updatedFilm = this.get(filmId);
+		if(!this.get(filmId).getUserLikes().contains(userId)) {
+			return null;
+		}
+		jdbcTemplate.execute("delete from user_likes"
+				   + " where user_id = " + userId + " and film_id = " + filmId);
+		updatedFilm.getUserLikes().remove(userId);
+		updatedFilm.setLikes(updatedFilm.getLikes() - 1);
+		return updatedFilm;
+	}
+
+	@Override
+	public List<Film> getTop(Integer limit) {
+		List<Film> top = this.getAll()
+				.stream()
+				.sorted(Comparator.reverseOrder())
+				.limit(limit)
+				.collect(Collectors.toList());
+		return top;
+	}
 
 	private Film makeFilm(Integer id) {
 		SqlRowSet rs = jdbcTemplate.queryForRowSet("select * "
@@ -155,23 +191,25 @@ public class InMemoryFilmDBStorage implements FilmDBStorage {
 
 	private boolean insertFilm(Integer id, Film film) {
 		boolean status = false;
-		String name = film.getName();
-		String description = film.getDescription();
-		String releaseDate = film.getReleaseDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		Integer duration = film.getDuration();
-
-		String sql = String.format("insert into film values "
-			 	+ "(%d, '%s', '%s', '%s', %d)", id, name, description, releaseDate, duration);
-
+		String query = String.format("insert into film values (?, ?, ?, ?, ?)");
 		try {
-			jdbcTemplate.execute(sql);
+			jdbcTemplate.execute(query, new PreparedStatementCallback<Boolean>() {
+				@Override
+				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+					ps.setInt(1, id);
+					ps.setString(2, film.getName());
+					ps.setString(3, film.getDescription());
+					ps.setString(4, film.getReleaseDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+					ps.setInt(5, film.getDuration());
+					return ps.execute();
+				}
+			});
 			status = true;
 			log.debug("Успешно обновлены основные данные фильма", id);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			log.error("Ошибка SQL запроса", id);
 		}
-
 		return status;
 	}
 
@@ -180,27 +218,30 @@ public class InMemoryFilmDBStorage implements FilmDBStorage {
 		if(!this.getFilmIds().contains(id)) {
 			return status;
 		}
-		String name = film.getName();
-		String description = film.getDescription();
-		String releaseDate = film.getReleaseDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		Integer duration = film.getDuration();
-
-		String sql = String.format("update film "
-				+ "set name = '%s', "
-			 	+ "description = '%s', "
-			 	+ "release_date = '%s', "
-			 	+ "duration = %d "
-			 	+ "where id = %d", name, description, releaseDate, duration, id);
-
+		String query = String.format("update film "
+				+ "set name = ?, "
+			 	+ "description = ?, "
+			 	+ "release_date = ?, "
+			 	+ "duration = ? "
+			 	+ "where id = ?");
 		try {
-			jdbcTemplate.execute(sql);
+			jdbcTemplate.execute(query, new PreparedStatementCallback<Boolean>() {
+				@Override
+				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+					ps.setString(1, film.getName());
+					ps.setString(2, film.getDescription());
+					ps.setString(3, film.getReleaseDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+					ps.setInt(4, film.getDuration());
+					ps.setInt(5, id);
+					return ps.execute();
+				}
+			});
 			status = true;
 			log.debug("Успешно создана запись фильма", id);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			log.error("Ошибка SQL запроса", id);
 		}
-
 		return status;
 	}
 

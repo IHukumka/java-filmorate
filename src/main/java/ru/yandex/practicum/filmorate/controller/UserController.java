@@ -3,8 +3,6 @@ package ru.yandex.practicum.filmorate.controller;
 import java.sql.SQLException;
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +26,6 @@ import javax.validation.Valid;
 @RequestMapping ("/users")
 public class UserController {
 
-	@Autowired
-	@Qualifier("InMemoryUserDBService")
 	private UserService service;
 	int counter = 0;
 

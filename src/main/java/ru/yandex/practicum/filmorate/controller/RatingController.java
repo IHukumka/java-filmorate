@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +25,6 @@ import ru.yandex.practicum.filmorate.service.RatingService;
 @RequestMapping ("/mpa")
 public class RatingController {
 	
-	@Autowired
-	@Qualifier("InMemoryRatingDBService")
 	private RatingService service;
 
 	public RatingController(RatingService service) {

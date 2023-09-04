@@ -2,8 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +26,6 @@ import javax.validation.Valid;
 @RequestMapping ("/films")
 public class FilmController {
 
-	@Autowired
-	@Qualifier("InMemoryFilmDBService")
 	private FilmService service;
 	int counter = 0;
 
@@ -48,7 +44,7 @@ public class FilmController {
 	@PutMapping
 	@ResponseBody
 	public Film update(@Valid @RequestBody Film newFilm) {
-		log.info("Получен запрос к эндпоинту: 'PUT_FILMS'.");
+		log.info("Получен запрос к эндпоинту: 'PUT_FILMS', id:{}", newFilm.getId());
 		Film film = service.edit(newFilm.getId(), newFilm);
 		if (film != null) {
 			log.debug("Обновлены данные фильма id = {}.", film.getId());
@@ -76,7 +72,7 @@ public class FilmController {
 	@GetMapping (value = "/{id}")
 	@ResponseBody
 	public Film get(@Valid @PathVariable Integer id) {
-		log.info("Получен запрос к эндпоинту: 'GET_FILMS_ID'.");
+		log.info("Получен запрос к эндпоинту: 'GET_FILMS_ID', id:{}", id);
 		Film film = this.service.get(id);
 		if (film != null) {
 			log.debug("Возвращены данные фильма id = {}.", film.getId());
@@ -99,7 +95,7 @@ public class FilmController {
 	@DeleteMapping (value = "/{id}")
 	@ResponseBody
 	public boolean delete(@Valid @PathVariable Integer id) {
-		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_ID'.");
+		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_ID', id:{}", id);
 		boolean deleted = this.service.delete(id);
 		if (deleted) {
 			log.debug("Возвращены данные фильма id = {}.", id);
@@ -114,7 +110,7 @@ public class FilmController {
 	@ResponseBody
 	public Film like(@Valid @PathVariable Integer filmId,
 					 @Valid @PathVariable Integer userId) {
-		log.info("Получен запрос к эндпоинту: 'PUT_FILMS_LIKE'.");
+		log.info("Получен запрос к эндпоинту: 'PUT_FILMS_LIKE', filmId:{}, userId:{}", filmId, userId);
 		Film film = this.service.addLike(filmId, userId);
 		if (film != null) {
 			log.debug("Добавлен лайк пользователя {} фильму id = {}.", userId, film.getId());
@@ -129,7 +125,7 @@ public class FilmController {
 	@ResponseBody
 	public Film dislike(@Valid @PathVariable Integer filmId,
 					    @Valid @PathVariable Integer userId) {
-		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_LIKE'.");
+		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_LIKE', filmId:{}, userId:{}", filmId, userId);
 		Film film = this.service.removeLike(filmId, userId);
 		if (film != null) {
 			log.debug("Удален лайк пользователя {} фильму id = {}.", userId, film.getId());

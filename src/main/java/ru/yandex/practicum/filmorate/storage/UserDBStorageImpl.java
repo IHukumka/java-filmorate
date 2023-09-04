@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +17,11 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryUserDBStorage")
-public class InMemoryUserDBStorage implements UserDBStorage {
+public class UserDBStorageImpl implements UserDBStorage {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	public InMemoryUserDBStorage(JdbcTemplate jdbcTemplate) {
+	public UserDBStorageImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -45,16 +47,11 @@ public class InMemoryUserDBStorage implements UserDBStorage {
 													  	+ "WHERE user_id = " + id);
 
 		if(userRows.next()) {
-
             User user = makeUser(userRows);
-
-            
             while(friendsRows.next()) {
     			user.getFriends().add(friendsRows.getInt("FRIEND_ID"));
     		}
-
             log.info("Найден пользователь: {} {}", user.getId(), user.getName());
-
             return user;
         } else {
             log.info("Пользователь с идентификатором {} не найден.", id);
@@ -89,47 +86,51 @@ public class InMemoryUserDBStorage implements UserDBStorage {
 
 	@Override
 	public User edit(Integer id, User user) {
-		String username = user.getName();
-		String login = user.getLogin();
-		if (username == null || username.isBlank()) {
-			username = login;
-		}
-		String email = user.getEmail();
-		String birthday = user.getBirthday().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-		String sql = String.format("update users set"
-				 	+ " username = '%s',"
-				 	+ " login = '%s'," 
-				 	+ " email = '%s',"
-				 	+ " birthday = '%s'"
-				 	+ " where id = '%d'", username, login, email, birthday, id);
-
-		jdbcTemplate.execute(sql);
-
+		String query = String.format("update users set"
+			 	+ " username = ?,"
+			 	+ " login = ?," 
+			 	+ " email = ?,"
+			 	+ " birthday = ?"
+			 	+ " where id = ?");
+		jdbcTemplate.execute(query, new PreparedStatementCallback<Boolean>() {
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				if(user.getName() == null) {
+					ps.setString(1, user.getLogin());
+				} else {
+					ps.setString(1, user.getName());
+				}
+				ps.setString(2, user.getLogin());
+				ps.setString(3, user.getEmail());
+				ps.setString(4, user.getBirthday().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				ps.setInt(5, id);
+				return ps.execute();
+			}
+		});
 		return this.get(id);
 	}
 
 	@Override
 	public User create(User user) {
-		String username = user.getName();
-		String login = user.getLogin();
-		if (username == null || username.isBlank()) {
-			username = login;
-		}
-		String email = user.getEmail();
-		String birthday = user.getBirthday().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
+		String query = String.format("insert into users values (?, ?, ?, ?, ?)");
 		SqlRowSet rs = jdbcTemplate.queryForRowSet("SELECT max(id) as id from users");
 		rs.next();
 		Integer id = rs.getInt("id") + 1;
-
-		String sql = String.format("insert into users"
-								+ " values (%d, '%s','%s','%s','%s')", id, username, login, email, birthday);
-
-		jdbcTemplate.execute(sql);
-		
-		
-
+		jdbcTemplate.execute(query, new PreparedStatementCallback<Boolean>() {
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setInt(1, id);
+				if(user.getName() == null || user.getName().isBlank()) {
+					ps.setString(2, user.getLogin());
+				} else {
+					ps.setString(2, user.getName());
+				}
+				ps.setString(3, user.getLogin());
+				ps.setString(4, user.getEmail());
+				ps.setString(5, user.getBirthday().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				return ps.execute();
+			}
+		});
 		return this.get(id);
 	}
 

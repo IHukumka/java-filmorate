@@ -3,22 +3,17 @@ package ru.yandex.practicum.filmorate.service;
 import java.util.List;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.RatingDBStorage;
 
 @Service
-@Qualifier("InMemoryRatingDBService")
-public class InMemoryRatingDBService implements RatingService {
+public class RatingDBService implements RatingService {
 
-	@Autowired
-	@Qualifier("InMemoryRatingDBStorage")
 	private RatingDBStorage storage;
 
-	public InMemoryRatingDBService(RatingDBStorage storage) {
+	public RatingDBService(RatingDBStorage storage) {
 		this.storage = storage;
 	}
 

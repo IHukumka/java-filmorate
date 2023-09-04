@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -17,5 +18,11 @@ public interface FilmDBStorage {
 	public Film edit(Integer id, Film film);
 
 	public Film create(Film film) ;
+
+	List<Film> getTop(Integer limit);
+
+	Film removeLike(Integer filmId, Integer userId);
+
+	Film addLike(Integer filmId, Integer userId);
 
 }

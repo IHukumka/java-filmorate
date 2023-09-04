@@ -5,23 +5,18 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreDBStorage;
 
 @Service
-@Qualifier("InMemoryGenreDBService")
-public class InMemoryGenreDBService implements GenreService {
+public class GenreDBService implements GenreService {
 
-	@Autowired
-	@Qualifier("InMemoryGenreDBStorage")
 	private GenreDBStorage storage;
 	
 
-	public InMemoryGenreDBService(GenreDBStorage storage) {
+	public GenreDBService(GenreDBStorage storage) {
 		this.storage = storage;
 	}
 

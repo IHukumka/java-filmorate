@@ -1,15 +1,12 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import java.util.ArrayList;
-
-import org.springframework.stereotype.Component;
+import java.util.List;
 
 import ru.yandex.practicum.filmorate.model.User;
 
-@Component
 public interface UserStorage {
-
-	public ArrayList<User> getAll();
+	
+	public List<User> getAll();
 
 	public User get(Integer id);
 
@@ -20,5 +17,4 @@ public interface UserStorage {
 	public User edit(Integer id, User user);
 
 	public User create(User user);
-
 }

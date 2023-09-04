@@ -3,24 +3,17 @@ package ru.yandex.practicum.filmorate.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserDBStorage;
 
 @Service
-@Qualifier("InMemoryUserDBService")
-public class InMemoryUserDBService implements UserService {
+public class UserDBService implements UserService {
 
-	@Autowired
-	@Qualifier("InMemoryUserDBStorage")
 	private UserDBStorage storage;
 
-	public InMemoryUserDBService(UserDBStorage storage) {
+	public UserDBService(UserDBStorage storage) {
 		this.storage = storage;
 	}
 
@@ -50,17 +43,17 @@ public class InMemoryUserDBService implements UserService {
 	}
 
 	@Override
-	public User create(@Valid User user) {
+	public User create(User user) {
 		return storage.create(user);
 	}
 
 	@Override
-	public User edit(Integer id, @Valid User newUser) {
+	public User edit(Integer id, User newUser) {
 		return storage.edit(id, newUser);
 	}
 
 	@Override
-	public User get(@Valid Integer id) throws SQLException {
+	public User get(Integer id) throws SQLException {
 		return storage.get(id);
 	}
 
@@ -70,7 +63,7 @@ public class InMemoryUserDBService implements UserService {
 	}
 
 	@Override
-	public boolean delete(@Valid Integer id) {
+	public boolean delete(Integer id) {
 		return storage.delete(id);
 	}
 

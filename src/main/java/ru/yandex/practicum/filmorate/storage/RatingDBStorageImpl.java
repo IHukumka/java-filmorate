@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.storage;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -12,12 +11,11 @@ import ru.yandex.practicum.filmorate.model.Rating;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryRatingDBStorage")
-public class InMemoryRatingDBStorage implements RatingDBStorage {
+public class RatingDBStorageImpl implements RatingDBStorage {
 
 	private final JdbcTemplate jdbcTemplate;	
 
-	public InMemoryRatingDBStorage(JdbcTemplate jdbcTemplate) {
+	public RatingDBStorageImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

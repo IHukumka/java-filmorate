@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +24,7 @@ import ru.yandex.practicum.filmorate.service.GenreService;
 @RestController
 @RequestMapping ("/genres")
 public class GenreController {
-	
-	@Autowired
-	@Qualifier("InMemoryGenreDBService")
+
 	private GenreService service;
 
 	public GenreController(GenreService service) {
@@ -70,7 +66,7 @@ public class GenreController {
 	@GetMapping (value = "/{id}")
 	@ResponseBody
 	public Genre get(@Valid @PathVariable Integer id) {
-		log.info("Получен запрос к эндпоинту: 'GET_GENRES_ID'.");
+		log.info("Получен запрос к эндпоинту: 'GET_GENRES_ID', id:{}", id);
 		Genre genre = this.service.get(id);
 		if (genre != null) {
 			log.debug("Возвращены данные жанра id = {}.", id);
@@ -93,9 +89,9 @@ public class GenreController {
 	@DeleteMapping (value = "/{id}")
 	@ResponseBody
 	public boolean delete(@Valid @PathVariable Integer id) {
-		log.info("Получен запрос к эндпоинту: 'DELETE_GENRES_ID'.");
+		log.info("Получен запрос к эндпоинту: 'DELETE_GENRES_ID', id:{}", id);
 		boolean deleted = this.service.delete(id);
-		if (deleted) {
+		if (this.service.delete(id)) {
 			log.debug("Удалены данные жанра id = {}.", id);
 			return deleted;
 		} else {
