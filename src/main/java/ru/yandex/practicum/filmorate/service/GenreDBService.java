@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import java.util.List;
 import java.util.Set;
 
-import javax.validation.Valid;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -13,9 +13,10 @@ import ru.yandex.practicum.filmorate.storage.GenreDBStorage;
 @Service
 public class GenreDBService implements GenreService {
 
+	@Autowired
+	@Qualifier("GenreDBStorageImpl")
 	private GenreDBStorage storage;
 	
-
 	public GenreDBService(GenreDBStorage storage) {
 		this.storage = storage;
 	}
@@ -26,17 +27,17 @@ public class GenreDBService implements GenreService {
 	}
 
 	@Override
-	public Genre create(@Valid Genre genre) {
+	public Genre create(Genre genre) {
 		return this.storage.create(genre);
 	}
 
 	@Override
-	public Genre edit(Integer id, @Valid Genre newGenre) {
+	public Genre edit(Integer id, Genre newGenre) {
 		return this.storage.edit(id, newGenre);
 	}
 
 	@Override
-	public Genre get(@Valid Integer id) {
+	public Genre get(Integer id) {
 		return this.storage.get(id);
 	}
 
@@ -46,7 +47,7 @@ public class GenreDBService implements GenreService {
 	}
 
 	@Override
-	public boolean delete(@Valid Integer id) {
+	public boolean delete(Integer id) {
 		return this.storage.delete(id);
 	}
 

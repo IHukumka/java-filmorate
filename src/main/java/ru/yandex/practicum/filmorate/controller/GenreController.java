@@ -91,7 +91,7 @@ public class GenreController {
 	public boolean delete(@Valid @PathVariable Integer id) {
 		log.info("Получен запрос к эндпоинту: 'DELETE_GENRES_ID', id:{}", id);
 		boolean deleted = this.service.delete(id);
-		if (this.service.delete(id)) {
+		if (deleted) {
 			log.debug("Удалены данные жанра id = {}.", id);
 			return deleted;
 		} else {

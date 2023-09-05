@@ -1,8 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
 import java.util.List;
-import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -11,6 +12,8 @@ import ru.yandex.practicum.filmorate.storage.RatingDBStorage;
 @Service
 public class RatingDBService implements RatingService {
 
+	@Autowired
+	@Qualifier("RatingDBStorageImpl")
 	private RatingDBStorage storage;
 
 	public RatingDBService(RatingDBStorage storage) {
@@ -23,17 +26,17 @@ public class RatingDBService implements RatingService {
 	}
 
 	@Override
-	public Rating create(@Valid Rating rating) {
+	public Rating create(Rating rating) {
 		return this.storage.create(rating);
 	}
 
 	@Override
-	public Rating edit(Integer id, @Valid Rating newRating) {
+	public Rating edit(Integer id, Rating newRating) {
 		return this.storage.edit(id, newRating);
 	}
 
 	@Override
-	public Rating get(@Valid Integer id) {
+	public Rating get(Integer id) {
 		return this.storage.get(id);
 	}
 
@@ -43,7 +46,7 @@ public class RatingDBService implements RatingService {
 	}
 
 	@Override
-	public boolean delete(@Valid Integer id) {
+	public boolean delete(Integer id) {
 		return this.storage.delete(id);
 	}
 

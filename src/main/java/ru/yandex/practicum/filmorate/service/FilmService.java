@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,7 +16,7 @@ public interface FilmService {
 
 	public Film edit(Integer id, @Valid Film newFilm);
 
-	public ArrayList<Film> getAll();
+	public List<Film> getAll();
 
 	public Film get(Integer id);
 

@@ -35,7 +35,7 @@ public class FilmController {
 
 	@GetMapping
 	@ResponseBody
-	public ArrayList<Film> getAll() {
+	public List<Film> getAll() {
 		log.info("Получен запрос к эндпоинту: 'GET_FILMS'. "
 				+ "Возвращен список всех фильмов.");
 		return service.getAll();

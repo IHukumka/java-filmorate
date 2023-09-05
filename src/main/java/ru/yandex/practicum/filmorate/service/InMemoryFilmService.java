@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -47,19 +44,14 @@ public class InMemoryFilmService implements FilmService {
 	}
 
 	public List<Film> getTop(Integer limit) {
-		List<Film> result = storage.getAll()
-									.stream()
-									.sorted(Comparator.reverseOrder())
-									.limit(limit)
-									.collect(Collectors.toList());
-		return result;
+		return this.storage.getTop(limit);
 	}
 
 	public Film edit(Integer id, @Valid Film newFilm) {
 		return storage.edit(id, newFilm);
 	}
 
-	public ArrayList<Film> getAll() {
+	public List<Film> getAll() {
 		return storage.getAll();
 	}
 

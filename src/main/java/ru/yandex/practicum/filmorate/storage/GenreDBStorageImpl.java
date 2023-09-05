@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 @Slf4j
-@Component
+@Repository
+@Qualifier("GenreDBStorageImpl")
 public class GenreDBStorageImpl implements GenreDBStorage {
 
 	private final JdbcTemplate jdbcTemplate;

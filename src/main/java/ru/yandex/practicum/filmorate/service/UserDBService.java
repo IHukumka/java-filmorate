@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.User;
@@ -11,6 +13,8 @@ import ru.yandex.practicum.filmorate.storage.UserDBStorage;
 @Service
 public class UserDBService implements UserService {
 
+	@Autowired
+	@Qualifier("UserDBStorageImpl")
 	private UserDBStorage storage;
 
 	public UserDBService(UserDBStorage storage) {

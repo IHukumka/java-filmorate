@@ -2,15 +2,17 @@ package ru.yandex.practicum.filmorate.storage;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.model.Rating;
 
 @Slf4j
-@Component
+@Repository
+@Qualifier("RatingDBStorageImpl")
 public class RatingDBStorageImpl implements RatingDBStorage {
 
 	private final JdbcTemplate jdbcTemplate;	
