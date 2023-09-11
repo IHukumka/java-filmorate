@@ -1,12 +1,12 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
 public interface FilmStorage {
 
-	public ArrayList<Film> getAll();
+	public List<Film> getAll();
 
 	public Film get(Integer id);
 
@@ -17,5 +17,7 @@ public interface FilmStorage {
 	public Film edit(Integer id, Film film);
 
 	public Film create(Film film);
+	
+	public List<Film> getTop(Integer limit);
 
 }

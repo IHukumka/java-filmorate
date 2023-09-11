@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-@Service
 public class InMemoryUserService implements UserService {
 
 	private UserStorage storage;

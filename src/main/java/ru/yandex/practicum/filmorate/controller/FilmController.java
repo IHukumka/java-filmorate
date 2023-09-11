@@ -35,7 +35,7 @@ public class FilmController {
 
 	@GetMapping
 	@ResponseBody
-	public ArrayList<Film> getAll() {
+	public List<Film> getAll() {
 		log.info("Получен запрос к эндпоинту: 'GET_FILMS'. "
 				+ "Возвращен список всех фильмов.");
 		return service.getAll();
@@ -44,13 +44,13 @@ public class FilmController {
 	@PutMapping
 	@ResponseBody
 	public Film update(@Valid @RequestBody Film newFilm) {
-		log.info("Получен запрос к эндпоинту: 'PUT_FILMS'.");
+		log.info("Получен запрос к эндпоинту: 'PUT_FILMS', id:{}", newFilm.getId());
 		Film film = service.edit(newFilm.getId(), newFilm);
 		if (film != null) {
 			log.debug("Обновлены данные фильма id = {}.", film.getId());
 			return film;
 		} else {
-			log.warn("Фильм id = {} в списке не найден.", newFilm.getId());
+			log.warn("Ошибка обновления фильма id = {}.", newFilm.getId());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -58,17 +58,21 @@ public class FilmController {
 	@PostMapping
 	@ResponseBody
 	public Film create(@Valid @RequestBody Film film) {
+		log.info("Получен запрос к эндпоинту: 'POST_FILMS'.");
 		Film newFilm =  this.service.create(film);
-		log.info("Получен запрос к эндпоинту: 'POST_FILMS'. "
-				+ "Создана запись фильма {}.",
-				newFilm.getId());
+		if (newFilm == null) {
+			log.error("Ошибка создания записи фильма.");
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		} else {
+			log.debug("Создана запись фильма id = {}.", film.getId());
+		}
 		return newFilm;
 	}
 
 	@GetMapping (value = "/{id}")
 	@ResponseBody
 	public Film get(@Valid @PathVariable Integer id) {
-		log.info("Получен запрос к эндпоинту: 'GET_FILMS_ID'.");
+		log.info("Получен запрос к эндпоинту: 'GET_FILMS_ID', id:{}", id);
 		Film film = this.service.get(id);
 		if (film != null) {
 			log.debug("Возвращены данные фильма id = {}.", film.getId());
@@ -81,7 +85,7 @@ public class FilmController {
 
 	@DeleteMapping
 	@ResponseBody
-	public ArrayList<Film> deleteAll() {
+	public List<Film> deleteAll() {
 		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS'. "
 				+ "Список фильмов пуст.");
 		service.clearAll();
@@ -91,7 +95,7 @@ public class FilmController {
 	@DeleteMapping (value = "/{id}")
 	@ResponseBody
 	public boolean delete(@Valid @PathVariable Integer id) {
-		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_ID'.");
+		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_ID', id:{}", id);
 		boolean deleted = this.service.delete(id);
 		if (deleted) {
 			log.debug("Возвращены данные фильма id = {}.", id);
@@ -106,7 +110,7 @@ public class FilmController {
 	@ResponseBody
 	public Film like(@Valid @PathVariable Integer filmId,
 					 @Valid @PathVariable Integer userId) {
-		log.info("Получен запрос к эндпоинту: 'PUT_FILMS_LIKE'.");
+		log.info("Получен запрос к эндпоинту: 'PUT_FILMS_LIKE', filmId:{}, userId:{}", filmId, userId);
 		Film film = this.service.addLike(filmId, userId);
 		if (film != null) {
 			log.debug("Добавлен лайк пользователя {} фильму id = {}.", userId, film.getId());
@@ -121,7 +125,7 @@ public class FilmController {
 	@ResponseBody
 	public Film dislike(@Valid @PathVariable Integer filmId,
 					    @Valid @PathVariable Integer userId) {
-		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_LIKE'.");
+		log.info("Получен запрос к эндпоинту: 'DELETE_FILMS_LIKE', filmId:{}, userId:{}", filmId, userId);
 		Film film = this.service.removeLike(filmId, userId);
 		if (film != null) {
 			log.debug("Удален лайк пользователя {} фильму id = {}.", userId, film.getId());

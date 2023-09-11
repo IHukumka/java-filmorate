@@ -34,7 +34,7 @@ public class Film implements Comparable<Film> {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Past(message = "Release date shall be in past")
 	@IsAfter(current = "1895-12-28",
-			 message = "Release date shall be after 28.12.1985")
+			 message = "Release date shall be after 28.12.1895")
 	private LocalDate releaseDate;
 
 	@Positive
@@ -44,6 +44,10 @@ public class Film implements Comparable<Film> {
 	private Integer likes;
 
 	private final HashSet<Integer> userLikes = new HashSet<>();
+
+	private final HashSet<Genre> genres = new HashSet<>();
+
+	private Rating mpa;
 
 	@Override
 	public int compareTo(Film otherFilm) {

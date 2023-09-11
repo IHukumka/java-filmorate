@@ -1,14 +1,14 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Component;
+import java.util.stream.Collectors;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
-@Component
 public class InMemoryFilmStorage implements FilmStorage {
 
 	protected final Map<Integer, Film> films;
@@ -74,6 +74,16 @@ public class InMemoryFilmStorage implements FilmStorage {
 
 	private int getNextId() {
 		return ++counter;
+	}
+
+	@Override
+	public List<Film> getTop(Integer limit) {
+		List<Film> result = this.getAll()
+				.stream()
+				.sorted(Comparator.reverseOrder())
+				.limit(limit)
+				.collect(Collectors.toList());
+		return result;
 	}
 
 }
